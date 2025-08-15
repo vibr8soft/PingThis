@@ -475,15 +475,37 @@ PingThis Website Monitor
             True if connection is successful, False otherwise
         """
         try:
+            self.logger.info(f"Testing connection to {self.config.smtp_server}:{self.config.smtp_port}")
+            self.logger.info(f"Username: {self.config.username}")
+            self.logger.info(f"Password length: {len(self.config.password)} characters")
+            self.logger.info(f"Using TLS: {self.config.use_tls}")
+            
             with smtplib.SMTP(self.config.smtp_server, self.config.smtp_port) as server:
+                server.set_debuglevel(1)  # Enable SMTP debug output
+                
                 if self.config.use_tls:
                     context = ssl.create_default_context()
                     server.starttls(context=context)
+                    self.logger.info("TLS connection established")
                 
                 server.login(self.config.username, self.config.password)
                 self.logger.info("Email connection test successful")
                 return True
                 
+        except smtplib.SMTPAuthenticationError as e:
+            self.logger.error(f"SMTP Authentication failed: {e}")
+            self.logger.error("Troubleshooting tips:")
+            self.logger.error("1. Ensure 2-Factor Authentication is enabled on your Gmail account")
+            self.logger.error("2. Generate a new App Password (not your regular password)")
+            self.logger.error("3. Copy the App Password without spaces")
+            self.logger.error("4. For Gmail, use your full email address as username")
+            return False
+            
+        except smtplib.SMTPConnectError as e:
+            self.logger.error(f"SMTP Connection failed: {e}")
+            self.logger.error("Check your internet connection and SMTP server settings")
+            return False
+            
         except Exception as e:
             self.logger.error(f"Email connection test failed: {e}")
             return False
