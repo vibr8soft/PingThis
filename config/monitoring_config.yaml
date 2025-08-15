@@ -1,0 +1,68 @@
+# PingThis Website Monitor Configuration
+# This file configures the URLs to monitor and email settings
+
+# Global settings
+log_level: "INFO" # DEBUG, INFO, WARNING, ERROR, CRITICAL
+log_file: "logs/pingthis.log" # Path to log file
+check_interval: 300 # Default check interval in seconds (5 minutes)
+
+# Email configuration for notifications
+email:
+  smtp_server: "smtp.gmail.com" # SMTP server address
+  smtp_port: 587 # SMTP port (587 for TLS, 465 for SSL, 25 for plain)
+  use_tls: true # Use TLS encryption
+  username: "your_email@gmail.com" # Your email username
+  password: "your_app_password" # Your email password or app password
+  from_email: "your_email@gmail.com" # From email address
+  to_emails: # List of recipient email addresses
+    - "alert1@example.com"
+    - "alert2@example.com"
+
+# URLs to monitor
+monitors:
+  # Example 1: Basic website monitoring
+  - url: "https://example.com"
+    timeout: 30 # Request timeout in seconds
+    check_interval: 300 # Override global check interval (optional)
+    expected_status_codes: [200, 201] # Expected HTTP status codes (optional)
+
+  # Example 2: API endpoint monitoring
+  - url: "https://api.example.com/health"
+    timeout: 15
+    check_interval: 180 # Check every 3 minutes
+    expected_status_codes: [200]
+
+  # Example 3: Another website with default settings
+  - url: "https://mywebsite.com"
+    # Will use global defaults for timeout and check_interval
+
+  # Add more URLs as needed
+  # - url: "https://another-site.com"
+  #   timeout: 45
+  #   check_interval: 600                   # Check every 10 minutes
+# Configuration Notes:
+#
+# 1. Email Setup:
+#    - For Gmail, use an "App Password" instead of your regular password
+#    - Enable 2-factor authentication and generate an app password
+#    - For other providers, check their SMTP settings
+#
+# 2. URL Monitoring:
+#    - Each URL can have its own timeout and check interval
+#    - If not specified, global defaults are used
+#    - expected_status_codes defaults to [200, 201, 202, 204]
+#
+# 3. Timing:
+#    - check_interval: How often to check each URL (in seconds)
+#    - timeout: How long to wait for a response (in seconds)
+#    - Recommended: timeout should be less than check_interval
+#
+# 4. Logging:
+#    - Logs are written to both file and console
+#    - Log files are created automatically if they don't exist
+#    - Use log_level to control verbosity
+#
+# 5. Alerts:
+#    - Only one DOWN alert is sent per downtime
+#    - Recovery alerts are sent when the site comes back up
+#    - Previous ping must have been successful before sending down alert

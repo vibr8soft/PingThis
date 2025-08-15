@@ -1,0 +1,20 @@
+# PingThis Website Monitor Requirements
+# Python 3.8+ required
+
+# HTTP requests and web scraping
+requests>=2.31.0
+
+# YAML configuration support
+PyYAML>=6.0.1
+
+# Additional dependencies for better error handling and SSL support
+urllib3>=2.0.0
+certifi>=2023.0.0
+
+# Development and testing dependencies (optional)
+# Uncomment if you need these for development
+# pytest>=7.4.0
+# pytest-cov>=4.1.0
+# mypy>=1.5.0
+# black>=23.0.0
+# flake8>=6.0.0
